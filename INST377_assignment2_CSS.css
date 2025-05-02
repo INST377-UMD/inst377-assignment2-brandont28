@@ -1,4 +1,4 @@
-/* Home */
+/* Home and Universal Attributes*/
 body {
   background-color:lightblue;
 }
@@ -109,3 +109,30 @@ body {
   border: 2px solid black;
 }
 
+.audioBox {
+  background-color: cornflowerblue;
+  color: white;
+  display: inline-block;
+  text-align: left;
+  padding: 20px;
+}
+
+.buttonContainer {
+  text-align: center;
+}
+
+.buttonContainer button{
+  padding: 15px 75px 15px 75px;
+  margin: 10px;
+  font-size: 15px;
+  border-radius: 10px;
+}
+
+/*Stocks*/
+.stocks-content {
+  text-align: left;
+}
+
+.stockChart {
+  width: 100%;
+}
