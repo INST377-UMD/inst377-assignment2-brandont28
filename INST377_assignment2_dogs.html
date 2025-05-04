@@ -3,6 +3,7 @@
   <head>
     <title>Assignment 2</title>
     <link rel="stylesheet" href="INST377_assignment2_CSS.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-slider/1.0.0/simpleslider.min.js"></script>
     <script src="INST377_assignment2_JS.js"></script>
   </head>
@@ -18,10 +19,13 @@
       </ul>
     </nav>
 
+    <!--Dog Images Carousel and Buttons that show info when clicked-->
     <div class="main-container">
         <div class="dogs-content">
-        <h1>Doggos! &#128054</h1>
+        <h1 style="text-align: left;">Doggos! &#128054</h1>
             <div data-simple-slider id="dogCarousel"></div>
+            <div class="dogButtons-container"></div>
+            <div class="breedInfo" style="display: none;"></div>
         </div>
 
       <!--Audio Navigation Box-->
@@ -29,9 +33,9 @@
         <h2>In this web page, there are options to navigate with audio!</h2>
         <p>Ensure your Mic is enabled to be able to use this feature.</p>
         <ul>
-          <li>Lookup &lt;stock&gt;</li>
+          <li>Load Dog Breed </li>
           <ul>
-            <li>Example: <b>Lookup MSFT</b></li>
+            <li>Say: <b>Load Dog Breed &lt;Dog Breed Name&gt;</b></li>
           </ul>
           <li>Navigate to a Different Page</li>
           <ul>

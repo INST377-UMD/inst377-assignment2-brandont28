@@ -48,14 +48,13 @@ async function generateStockChart() {
     });
 }
 
-//Top 5 Reddit stocks function
+//Fetches top 5 Reddit stocks and appends to table
 function top5Stocks () {
     //Fetches only top 5 reddit stocks
     fetch('https://tradestie.com/api/v1/apps/reddit?date=2022-04-03')
         .then(resp => resp.json())
         .then(data => {
         const top5 = data.slice(0, 5);
-        console.log(top5);
 
         //Creates elements that will be appended to the table
         top5.forEach(stock => {
@@ -91,6 +90,7 @@ function top5Stocks () {
         });  
 }
 
+//Fetches random dog images and creates a simple carousel that rotates images based on time
 function randomDogs () {
     //Fetches 10 random dog pictures on window load and adds to the carousel
     fetch('https://dog.ceo/api/breeds/image/random/10')
@@ -108,8 +108,55 @@ function randomDogs () {
     });
 }
 
+//Dog Button functions
+function dogBreeds () {
+    fetch('https://dogapi.dog/api/v2/breeds')
+    .then((resp) => resp.json())
+    .then((data) => {
+        const breeds = data.data;
+        const dogButtonsContainer = document.getElementsByClassName('dogButtons-container')[0];
+        const breedInfo = document.getElementsByClassName('breedInfo')[0];
+
+        breeds.forEach(breed => {
+            const button = document.createElement('button');
+            button.textContent = breed.attributes.name;
+            button.setAttribute('class', 'breed-button');
+
+            button.addEventListener('click', () => {
+                breedInfo.innerHTML = `
+                <h1>Name: ${breed.attributes.name}</h1>
+                <h2>Description: ${breed.attributes.description}</h2>
+                <h2>Min Life: ${breed.attributes.life.min}</h2>
+                <h2>Max Life: ${breed.attributes.life.max}</h2>
+                `;
+                breedInfo.style.display = 'block';
+            })
+            dogButtonsContainer.appendChild(button);
+        });
+    });
+}
+
+//Annyang Audio Commands
+if (annyang) {
+    const commands = {
+        'hello': () => {alert('Hello World');
+
+        },
+
+        'change the color to *color': (color) => {
+            document.body.style.backgroundColor = color;
+        }
+
+    };
+
+    annyang.addCommands(commands);
+    annyang.start();
+}
+
+
 window.onload = function(){
     getQuote();
     top5Stocks();
     randomDogs();
+    dogBreeds();
 }
