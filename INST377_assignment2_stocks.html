@@ -3,7 +3,7 @@
   <head>
     <title>Assignment 2</title>
     <link rel="stylesheet" href="INST377_assignment2_CSS.css" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="INST377_assignment2_JS.js"></script>
   </head>
@@ -27,7 +27,7 @@
           id="stockLookup"
           onsubmit="event.preventDefault(); generateStockChart();"
         >
-          <input type="text" id="ticker" />
+          <input type="text" id="ticker" maxlength="5" required />
           <br />
           <br />
           <select id="days">

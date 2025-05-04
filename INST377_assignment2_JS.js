@@ -10,10 +10,10 @@ function getQuote() {
 }
 
 //Generate stock chart function based on user input of Ticker and day count
-async function generateStockChart() {
+async function generateStockChart(tickerArg = null) {
     const apiKey = 'lIqWG9GF8NXdidRfJ0Nx53ICFEfvBsoU';
-    const ticker = document.getElementById('ticker').value;
-    const days = document.getElementById('days').value;
+    const ticker = tickerArg || document.getElementById('ticker').value;
+    const days = document.getElementById('days').value || 30;
 
     //Converts date format to be usable in Polygon API
     const startDate = new Date();
@@ -108,14 +108,18 @@ function randomDogs () {
     });
 }
 
+//Stores globally to allow for voice command to work outside of dogBreeds function
+let breeds = [];
+let breedInfo;
+
 //Dog Button functions
 function dogBreeds () {
     fetch('https://dogapi.dog/api/v2/breeds')
     .then((resp) => resp.json())
     .then((data) => {
-        const breeds = data.data;
+        breeds = data.data;
         const dogButtonsContainer = document.getElementsByClassName('dogButtons-container')[0];
-        const breedInfo = document.getElementsByClassName('breedInfo')[0];
+        breedInfo = document.getElementsByClassName('breedInfo')[0];
 
         breeds.forEach(breed => {
             const button = document.createElement('button');
@@ -137,22 +141,80 @@ function dogBreeds () {
 }
 
 //Annyang Audio Commands
-if (annyang) {
-    const commands = {
-        'hello': () => {alert('Hello World');
+let commandsAdded = false;
 
-        },
+document.addEventListener('DOMContentLoaded', () => {
+    const onButton = document.getElementById('listeningOn');
+    const offButton = document.getElementById('listeningOff');
+    
+    if (annyang && onButton && offButton) {
+        const commands = {
 
-        'change the color to *color': (color) => {
-            document.body.style.backgroundColor = color;
-        }
-
-    };
-
-    annyang.addCommands(commands);
-    annyang.start();
-}
-
+            //Hello World Alert
+            'hello': () => {alert('Hello World');
+            },
+        
+            //Changes background color of the page
+            'change the color to *color': (color) => {
+                document.body.style.backgroundColor = color;
+            },
+        
+            //Changes webpage
+            'navigate to *page': (page) => {
+                const lowercasePage = page.toLowerCase();
+                const pages = {
+                    home: 'INST377_assignment2_home.html',
+                    stocks: 'INST377_assignment2_stocks.html',
+                    dogs: 'INST377_assignment2_dogs.html'
+                };
+        
+                if (pages[lowercasePage]) {
+                    window.location.href = pages[lowercasePage];
+                }
+            },
+        
+            //Inputs ticker and calls generateStockChart function
+            'look up *ticker': (ticker) => {
+                const tickerFormatted = ticker.toUpperCase().replace(/\s/g, '');
+        
+                const userInput = document.getElementById('ticker');
+                if (userInput) userInput.value = tickerFormatted;
+                    
+                if (typeof generateStockChart == 'function') {
+                    generateStockChart(tickerFormatted)
+                }
+            },
+        
+            //Loads breedInfo box for said breed
+            'load dog breed *breedName': (breedName) => {
+                const breedFormatted = breedName.trim().toLowerCase();
+                const breed = breeds.find(b => b.attributes.name.toLowerCase() === breedFormatted);
+                    
+                if (breed) {
+                    breedInfo.innerHTML = `
+                        <h1>Name: ${breed.attributes.name}</h1>
+                        <h2>Description: ${breed.attributes.description}</h2>
+                        <h2>Min Life: ${breed.attributes.life.min}</h2>
+                        <h2>Max Life: ${breed.attributes.life.max}</h2>
+                    `;
+                    breedInfo.style.display = 'block';
+                }
+            }};
+    
+        //Enables voice control through buttons in audio box
+        onButton.addEventListener('click', () => {
+            if (!commandsAdded) {
+                annyang.addCommands(commands);
+                commandsAdded = true;
+            }
+            annyang.start({ autoRestart: true, continuous: true });
+        });
+    
+        offButton.addEventListener('click', () => {
+            annyang.abort();
+        });
+    }
+});
 
 window.onload = function(){
     getQuote();
